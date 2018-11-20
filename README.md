@@ -1,1 +1,3 @@
-{\rtf1}
+Networking assignmnets repository. 
+
+Fall semester, 2018.
