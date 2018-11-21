@@ -17,10 +17,11 @@ $(VERBOSE).SILENT:
 #-----------------------------------------------------------------------
 
 # SHELL
-SHLL = xsh_test.c shell-commands.c xsh_dhcpsnoop.c xsh_arp.c xsh_netstat.c
+SHLL = xsh_test.c shell-commands.c xsh_dhcpsnoop.c xsh_arp.c xsh_netstat.c xsh_ping.c
 NET  = netInit.c netDaemon.c netUtils.c \
 		dhcp/client.c dhcp/sendDiscover.c dhcp/recvOffer.c \
 		arp/arpInit.c arp/arpReceive.c arp/arpReply.c arp/arpResolve.c
+		icmp/icmpResolve.c 
 
 SRC =	${SHLL:%.c=../shell/%.c} \
 		${NET:%.c=../network/%.c}
