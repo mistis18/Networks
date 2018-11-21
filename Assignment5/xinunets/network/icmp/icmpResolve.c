@@ -70,6 +70,11 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
 	struct imcp_t my_ping;
+	struct ipgram ip_header;
+	struct icmp_header_t icmp_header;
+	my_ping->ip_header = ip_header;
+	my_ping->icmp_header = icmp_header;
+
 	message m;
 
 	// Spawn a process to send ping request.
@@ -90,5 +95,6 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		memcpy(ping, my_ping, sizeof(struct icmp_t));
 		return OK;
 	}
+
 	return SYSERR;
 }
