@@ -6,7 +6,6 @@
 #include <xinu.h>
 #include "icmp.h"
 #include "../arp/arp.h"
-#include "network.h"
 
  /**
   * Generate a sequence of ARP requests.
