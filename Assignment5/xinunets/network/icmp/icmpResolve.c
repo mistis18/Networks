@@ -33,8 +33,8 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	bzero(packet, PKTSZ);
 
 	// Construct IP Header
-	for (i = 0; i < ETH_ADDR_LEN; i++)	egram->dst[i] = 0xFF;
-	control(dev, ETH_CTRL_GET_MAC, (ulong)(egram->src), 0);
+	for (i = 0; i < ETH_ADDR_LEN; i++)	ether->dst[i] = 0xFF;
+	control(dev, ETH_CTRL_GET_MAC, (ulong)(ether->src), 0);
 	egram->type = htons(ETYPE_IPv4);
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
 	dgram->tos = IPv4_TOS_ROUTINE; /*Type 0*/
