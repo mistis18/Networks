@@ -19,6 +19,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	struct icmp_t *icmp		= (struct icmp_t*) ether->data;
 	struct ipgram *dgram	= (struct ipgram*) icmp->ip_header;
 	struct icmp_header_t *icmp_header = (struct icmp_header_t*) icmp->icmp_header;
+	int i;
 
 	// Send ARP Request
 	uchar macaddr[ETH_ADDR_LEN];
@@ -32,7 +33,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	bzero(packet, PKTSZ);
 
 	// Construct IP Header
-	for (int i = 0; i < ETH_ADDR_LEN; i++)	egram->dst[i] = 0xFF;
+	for (i = 0; i < ETH_ADDR_LEN; i++)	egram->dst[i] = 0xFF;
 	control(dev, ETH_CTRL_GET_MAC, (ulong)(egram->src), 0);
 	egram->type = htons(ETYPE_IPv4);
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
@@ -43,8 +44,8 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	dgram->ttl = 63;
 	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
 	dgram->chksum = 0; /* Set Checksum and Length later */
-	for (int i = 0; i < IPv4_ADDR_LEN; i++) dgram->src[i] = 0x00;
-	for (int i = 0; i < IPv4_ADDR_LEN; i++) dgram->dst[i] = 0xFF;
+	for (i = 0; i < IPv4_ADDR_LEN; i++) dgram->src[i] = 0x00;
+	for (i = 0; i < IPv4_ADDR_LEN; i++) dgram->dst[i] = 0xFF;
 	
 	// Contrust ICMP Header
 	icmp_header->type = ECHO_REQUEST;
