@@ -5,6 +5,7 @@
 
 #include <xinu.h>
 #include "icmp.h"
+#include "../arp/arp.h"
 
  /**
   * Generate a sequence of ARP requests.
@@ -23,7 +24,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
-		fprintf(stdout, "Could not resolve %s\n", args[1]);
+		fprintf(stdout, "Could not resolve %s\n", ipaddr);
 		return 1;
 	}
 
