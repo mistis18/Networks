@@ -18,7 +18,7 @@
 command xsh_ping(int nargs, char *args[])
 {
 	uchar ipaddr[IP_ADDR_LEN];
-	struct imcp_t ping;
+	struct icmp_t ping;
 
 	/* Check arguments */
 	if(nargs >= 1)
