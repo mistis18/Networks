@@ -32,10 +32,12 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	// Construct the echoRequest
 	bzero(packet, PKTSZ);
 
-	// Construct IP Header
+	// Construct Ethernet Header
 	for (i = 0; i < ETH_ADDR_LEN; i++)	ether->dst[i] = 0xFF;
 	control(dev, ETH_CTRL_GET_MAC, (ulong)(ether->src), 0);
-	egram->type = htons(ETYPE_IPv4);
+	ether->type = htons(ETYPE_IPv4);
+
+	// Construct IP Header
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
 	dgram->tos = IPv4_TOS_ROUTINE; /*Type 0*/
 	dgram->len = 0; /* Set Checksum and Length later */
