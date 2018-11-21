@@ -58,7 +58,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
 	// Set IP Header Checksum and Length
-	dgram->len = (sizeof(ipgram) + sizeof(icmp_header_t))/ sizeof(uchar); // calculate size in bytes
+	dgram->len = (sizeof(struct ipgram) + sizeof(struct icmp_header_t))/ sizeof(uchar); // calculate size in bytes
 	dgram->chksum = checksum((uchar *)dgram,
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
