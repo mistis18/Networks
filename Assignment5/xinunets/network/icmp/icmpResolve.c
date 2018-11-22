@@ -29,11 +29,11 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	fprintf(stdout, "echoRequest - icmp\n");
 	sleep(2000);
 
-	struct ipgram *dgram	= (struct ipgram*) icmp->ip_header;
+	struct ipgram *dgram	=  icmp->ip_header;
 	fprintf(stdout, "echoRequest - ipheader\n");
 	sleep(2000);
 
-	struct icmp_header_t *icmp_header = (struct icmp_header_t*) icmp->icmp_header;
+	struct icmp_header_t *icmp_header = icmp->icmp_header;
 	fprintf(stdout, "echoRequest - icmp header\n");
 	sleep(2000);
 
