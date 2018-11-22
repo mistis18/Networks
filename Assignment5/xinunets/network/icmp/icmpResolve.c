@@ -72,7 +72,7 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 
 	// Construct Ethernet Header
 	getmac(dev, ether->src);
-	ether->dst[i] = macaddr;
+	memcpy(ether->dst, macaddr, ETH_ADDR_LEN);
 	ether->type = htons(ETYPE_IPv4);
 
 	fprintf(stdout, "echoRequest - constructed ether\n");
@@ -88,7 +88,8 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
 	dgram->chksum = 0; /* Set Checksum and Length later */
 	getip(dev, dgram->src);
-	dgram->dst = *ipaddr;
+	memcpy(dgram->dst, ipaddr, IP_ADDR_LEN);
+
 
 	fprintf(stdout, "echoRequest - constructed ip\n");
 	sleep(2000);
