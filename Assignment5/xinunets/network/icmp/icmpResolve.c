@@ -79,6 +79,8 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 
 	message m;
 
+	fprintf(stdout, "icmpResolve - Spawn process");
+
 	// Spawn a process to send ping request.
 	ready(create
 	((void *)echoRequest, INITSTK,
@@ -86,7 +88,12 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		"ECHO requester", 3,
 		 ETH0, ipaddr, my_ping), RESCHED_NO);
 
+	fprintf(stdout, "icmpResolve - Process spawned");
+
 	m = receive();
+
+	fprintf(stdout, "icmpResolve - m received");
+
 	if (TIMEOUT == m)
 	{
 		return SYSERR;
