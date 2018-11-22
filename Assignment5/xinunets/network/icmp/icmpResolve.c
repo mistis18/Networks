@@ -111,12 +111,10 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
 	// Send the echoRequest (ping)
-	ushort icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
-
 	fprintf(stdout, "echoRequest - checksums done\n");
 	sleep(2000);
 
-	write(dev, (uchar *)packet, icmp_size);
+	write(dev, (uchar*)packet, sizeof(packet));
 
 	sleep(1000);
 
