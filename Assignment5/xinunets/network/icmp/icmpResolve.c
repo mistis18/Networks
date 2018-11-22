@@ -123,8 +123,8 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	fprintf(stdout, "echoRequest - write done\n");
 	sleep(2000);
 
-	memcpy(dgram, ip, sizeof(struct ipgram));
-	memcpy(icmp_header, icmp, sizeof(struct icmp_header_t));
+	memcpy(ip, dgram, sizeof(struct ipgram));
+	memcpy(icmp, icmp_header, sizeof(struct icmp_header_t));
 	
 	fprintf(stdout, "echoRequest - memcpy done\n");
 	sleep(2000);
@@ -137,8 +137,8 @@ int icmpResolve(uchar* ipaddr)
 	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
 
-	struct ipgram* ip;
-	struct icmp_header_t* icmp;
+	struct ipgram ip;
+	struct icmp_header_t icmp;
 
 	message m;
 
@@ -150,7 +150,7 @@ int icmpResolve(uchar* ipaddr)
 	((void *)echoRequest, INITSTK,
 		proctab[currpid].priority + 1,
 		"ECHO requester", 3,
-		 ETH0, ipaddr, ip, icmp), RESCHED_NO);
+		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned\n");
 	sleep(1000);
@@ -165,7 +165,7 @@ int icmpResolve(uchar* ipaddr)
 		return SYSERR;
 	}
 
-	if (0 == memcmp(ip->src, ipaddr, IP_ADDR_LEN))
+	if (0 == memcmp(ip.src, ipaddr, IP_ADDR_LEN))
 	{
 		//memcpy(ping, &my_ping, sizeof(struct icmp_t));
 		return OK;
