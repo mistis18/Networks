@@ -14,6 +14,8 @@
   */
 process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 {
+	fprintf(stdout, "echoRequest - enter", ipaddr);
+
 	uchar packet[PKTSZ];
 	struct ethergram *ether = (struct ethergram*) packet;
 	struct icmp_t *icmp		= (struct icmp_t*) ether->data;
