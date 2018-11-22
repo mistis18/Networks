@@ -111,6 +111,8 @@ process arpRequest(int dev, int arpindex, uchar *ipaddr)
  */
 int arpResolve(uchar *ipaddr, uchar *mac)
 {
+	fprintf(stdout, "this prints");
+
 	int arpindex;
 	struct arpentry myarp;
 	message m;
