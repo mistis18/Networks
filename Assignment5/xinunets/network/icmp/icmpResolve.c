@@ -75,7 +75,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
 	fprintf(stdout, "icmpResolve - entered");
 
-	struct icmp_t ping;
+	struct icmp_t my_ping;
 	message m;
 
 	fprintf(stdout, "icmpResolve - Spawn process");
