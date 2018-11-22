@@ -43,7 +43,7 @@ command xsh_ping(int nargs, char *args[])
 	fprintf(stdout, "PING %s \n", ipaddr);
 
 	/* Call icmpResolve */
-	if (OK != icmpResolve(ipaddr, &ping))
+	if (OK != icmpResolve(ipaddr, ping))
 	{
 		fprintf(stdout, "Could not resolve %s\n", args[1]);
 		return 1;
