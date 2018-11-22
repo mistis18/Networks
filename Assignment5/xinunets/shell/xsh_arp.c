@@ -118,8 +118,6 @@ command xsh_arp(int nargs, char *args[])
 		return 1;
 	}
 
-	fprintf(stdout, "arp %s \n", ipaddr);
-
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
 		fprintf(stdout, "Could not resolve %s\n", args[1]);
