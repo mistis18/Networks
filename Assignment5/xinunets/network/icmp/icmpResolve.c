@@ -124,6 +124,8 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	sleep(2000);
 
 	memcpy(ip, dgram, sizeof(struct ipgram));
+	fprintf(stdout, "echoRequest - ipgram done\n");
+
 	memcpy(icmp, icmp_header, sizeof(struct icmp_header_t));
 	
 	fprintf(stdout, "echoRequest - memcpy done\n");
