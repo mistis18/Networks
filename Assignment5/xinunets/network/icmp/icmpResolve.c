@@ -3,6 +3,7 @@
  * @provides imcpResolve
  */
 
+#include <cstdlib>
 #include <xinu.h>
 #include "icmp.h"
 #include "../arp/arp.h"
@@ -97,6 +98,8 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		memcpy(ping, my_ping, sizeof(struct icmp_t));
 		return OK;
 	}
+
+	free(my_ping);
 
 	return SYSERR;
 }
