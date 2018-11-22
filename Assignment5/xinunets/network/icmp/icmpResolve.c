@@ -145,7 +145,7 @@ int icmpResolve(uchar* ipaddr)
 		return SYSERR;
 	}
 
-	if (0 == memcmp(my_ping.ip_header->dst, ipaddr, IP_ADDR_LEN))
+	if (0 == memcmp(ip.src, ipaddr, IP_ADDR_LEN))
 	{
 		//memcpy(ping, &my_ping, sizeof(struct icmp_t));
 		return OK;
