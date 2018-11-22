@@ -3,7 +3,7 @@
  * @provides imcpResolve
  */
 
-#include <cstdlib>
+#include <stdint.h>
 #include <xinu.h>
 #include "icmp.h"
 #include "../arp/arp.h"
