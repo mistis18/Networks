@@ -39,9 +39,6 @@ process echoRequest(int dev, uchar* ipaddr)
 	sleep(2000);
 	*/
 
-	uchar packet[PKTSZ];
-	uchar *opt = NULL;
-
 	struct ethergram *ether = (struct ethergram*) packet;
 	fprintf(stdout, "echoRequest - ethergram\n");
 	sleep(2000);
@@ -117,7 +114,6 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
 
-	struct icmp_t my_ping;
 	message m;
 
 	fprintf(stdout, "icmpResolve - Spawn process\n");
@@ -128,7 +124,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 	((void *)echoRequest, INITSTK,
 		proctab[currpid].priority + 1,
 		"ECHO requester", 3,
-		 ETH0, ipaddr, &my_ping), RESCHED_NO);
+		 ETH0, ipaddr), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned\n");
 	sleep(1000);
@@ -145,7 +141,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 
 	if (0 == memcmp(my_ping.ip_header->dst, ipaddr, IP_ADDR_LEN))
 	{
-		memcpy(ping, &my_ping, sizeof(struct icmp_t));
+		//memcpy(ping, &my_ping, sizeof(struct icmp_t));
 		return OK;
 	}
 
