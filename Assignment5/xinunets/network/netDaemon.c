@@ -90,7 +90,7 @@ void netDaemon(int dev, struct netif *nif)
 				else if(icmp_header->type == ECHO_REQUEST)
 				{
 					//Send PING response
-					echoReply(egram);
+					echoReply(dev, egram);
 				}
 
 

@@ -178,7 +178,7 @@ int icmpReply(struct ethergram* egram)
 		"ECHO responder", 2,
 		 ETH0, egram), RESCHED_NO);
 
-	return OK
+	return OK;
 }
 
 

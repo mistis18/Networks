@@ -58,6 +58,6 @@ struct icmp_t
 */ 
 
 int icmpResolve(uchar* ipaddr);
-int echoReply(struct ipgram* ip_packet);
+int echoReply(int dev, struct ethergram* egram);
 
 
