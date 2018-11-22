@@ -21,6 +21,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	fprintf(stdout, "echoRequest - packet\n");
 	sleep(2000);
 
+	/*
 	struct ethergram *ether = (struct ethergram*) packet;
 	fprintf(stdout, "echoRequest - ethergram\n");
 	sleep(2000);
@@ -34,6 +35,22 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	sleep(2000);
 
 	struct icmp_header_t *icmp_header = icmp->icmp_header;
+	fprintf(stdout, "echoRequest - icmp header\n");
+	sleep(2000);
+	*/
+
+	uchar packet[PKTSZ];
+	uchar *opt = NULL;
+
+	struct ethergram *ether = (struct ethergram*) packet;
+	fprintf(stdout, "echoRequest - ethergram\n");
+	sleep(2000);
+
+	struct ipgram *dgram = (struct ipgram*) ether->data;
+	fprintf(stdout, "echoRequest - dgram\n");
+	sleep(2000);
+
+	struct icmp_header_t *icmp_header = (struct icmp_header_t*) dgram->opts;
 	fprintf(stdout, "echoRequest - icmp header\n");
 	sleep(2000);
 

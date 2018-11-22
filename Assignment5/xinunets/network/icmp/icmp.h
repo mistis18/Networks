@@ -49,11 +49,13 @@ struct icmp_header_t
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 
+/*
 struct icmp_t
 {
 	struct ipgram* ip_header;
 	struct icmp_header_t* icmp_header;
 };
+*/ 
 
 int icmpResolve(uchar* ipaddr, struct icmp_t* ping);
 int echoReply(struct ipgram* ip_packet);
