@@ -21,7 +21,7 @@ command xsh_ping(int nargs, char *args[])
 	struct icmp_t ping;
 
 	/* Check arguments */
-	if(nargs >= 1)
+	if(nargs < 2)
 	{
 		fprintf(stderr, "Error: No Arguments Provided. \n");
 		return 1;
