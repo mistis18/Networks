@@ -8,6 +8,7 @@
 #include <xinu.h>
 #include "arp/arp.h"
 #include "dhcp/dhcp.h"
+#include "icmp/icmp.h"
 
 #define MAXBUFS 32
 
@@ -20,6 +21,7 @@ void netDaemon(int dev, struct netif *nif)
 	uchar *packet = NULL;
 	struct ethergram *egram = NULL;
 	struct ipgram    *dgram = NULL;
+	struct icmp_header_t *icmp_header = NULL;
 	int dhcpd = 0;
 	int len   = 0;
 	int bufpoolID = 0;
@@ -29,6 +31,10 @@ void netDaemon(int dev, struct netif *nif)
 	dhcpd = create((void *)dhcpclient, INITSTK, INITPRIO*2, "DHCPC", 2,
 				   ETH0, nif);
 	ready(dhcpd, RESCHED_YES);
+
+
+
+
 
 	bufpoolID = bfpalloc(PKTSZ, MAXBUFS);
 	if (SYSERR == bufpoolID)
@@ -69,6 +75,25 @@ void netDaemon(int dev, struct netif *nif)
 			if (IPv4_PROTO_UDP == dgram->proto)
 			{
 				send(dhcpd, (ulong)packet);
+			}
+			else if (IPv4_PROTO_ICMP == dgram->proto)
+			{
+				icmp_header = (struct icmp_header_t*) dgram->opts;
+
+				if(icmp_header->type == ECHO_REPLY)
+				{
+					//Get PING PID
+
+					//Send reply to PING process
+
+				}
+				else if(icmp_header->type == ECHO_REQUEST)
+				{
+					//Send PING response
+					echoReply(egram);
+				}
+
+
 			}
 			break;
 

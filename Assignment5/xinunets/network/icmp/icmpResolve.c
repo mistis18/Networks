@@ -7,6 +7,7 @@
 #include "icmp.h"
 #include "../arp/arp.h"
 
+
  /**
   * Generate an echo request.
   *
@@ -107,6 +108,79 @@ process echoRequest(int dev, uchar* ipaddr)
 
 	return OK;
 }
+
+ /**
+  * Generate an echo response.
+  *
+  * @param *egram the incoming ethergram that contains the PING request
+  */
+process echoReply(int dev, struct ethergram* egram)
+{
+	//Outgoing Packet
+	uchar packet[PKTSZ];
+	struct ethergram *ether = (struct ethergram*) packet;
+	struct ipgram *dgram = (struct ipgram*) ether->data;
+	struct icmp_header_t *icmp_header = (struct icmp_header_t*) dgram->opts;
+
+	//Incoming ICMP Info Pointers
+	struct  ipgram *dgram_in = (struct ipgram*) egram->data;
+	struct icmp_header_t *icmp_header_in = (struct icmp_header_t*) dgram_in->opts;
+
+	int i;
+
+	// Construct the echoRequest
+	bzero(packet, PKTSZ);
+
+	// Construct Ethernet Header
+	//Add the current device MAC address
+	getmac(dev, ether->src);
+	//use the MAC Address from the incoming ethergram as DST
+	memcpy(ether->dst, egram->src, ETH_ADDR_LEN); 
+	ether->type = htons(ETYPE_IPv4);
+
+	// Construct IP Header
+	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
+	dgram->tos = IPv4_TOS_ROUTINE; /*Type 0*/
+	dgram->len = 0; /* Set Checksum and Length later */
+	dgram->id = htons(currpid);
+	dgram->flags_froff = 0;
+	dgram->ttl = 63;
+	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
+	dgram->chksum = 0; /* Set Checksum and Length later */
+	getip(dev, dgram->src);
+	//Copy the incoming dgram src as the outgoing dst
+	memcpy(dgram->dst, dgram_in->src, IP_ADDR_LEN);
+		
+	// Contrust ICMP Header
+	icmp_header->type = ECHO_REPLY;
+	icmp_header->code = 0; /* see https://tools.ietf.org/html/rfc792 */
+	icmp_header->identifier = htons(currpid);
+	icmp_header->sequence_number = 0;
+	icmp_header->checksum = checksum((uchar *)icmp_header,
+		(4 * (dgram->ver_ihl & IPv4_IHL)));
+
+	// Set IP Header Checksum and Length
+	dgram->len = (sizeof(struct ipgram) + sizeof(struct icmp_header_t)); 
+	dgram->chksum = checksum((uchar *)dgram,
+		(4 * (dgram->ver_ihl & IPv4_IHL)));
+
+	write(dev, (uchar *)packet,
+		sizeof(struct ethergram) + sizeof(struct ipgram) + sizeof(struct icmp_header_t));
+
+	return OK;
+}
+
+int icmpReply(struct ethergram* egram)
+{
+	ready(create
+	((void *)echoReply, INITSTK,
+		proctab[currpid].priority + 1,
+		"ECHO responder", 2,
+		 ETH0, egram), RESCHED_NO);
+
+	return OK
+}
+
 
 int icmpResolve(uchar* ipaddr)
 {
