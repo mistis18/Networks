@@ -18,7 +18,6 @@
 command xsh_ping(int nargs, char *args[])
 {
 	uchar ipaddr[IP_ADDR_LEN];
-	struct icmp_t ping;
 
 	/* Check arguments */
 	if(nargs < 2)
@@ -43,7 +42,7 @@ command xsh_ping(int nargs, char *args[])
 	fprintf(stdout, "PING %s \n", ipaddr);
 
 	/* Call icmpResolve */
-	if (OK != icmpResolve(ipaddr, &ping))
+	if (OK != icmpResolve(ipaddr))
 	{
 		fprintf(stdout, "Could not resolve %s\n", args[1]);
 		return 1;

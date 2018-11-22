@@ -57,6 +57,6 @@ struct icmp_t
 };
 */ 
 
-int icmpResolve(uchar* ipaddr, struct icmp_t* ping);
+int icmpResolve(uchar* ipaddr);
 int echoReply(struct ipgram* ip_packet);
 

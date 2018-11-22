@@ -12,7 +12,7 @@
   *
   * @param *ipaddr pointer to the IP address
   */
-process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
+process echoRequest(int dev, uchar* ipaddr)
 {
 	fprintf(stdout, "echoRequest - entered\n");
 	sleep(2000);
