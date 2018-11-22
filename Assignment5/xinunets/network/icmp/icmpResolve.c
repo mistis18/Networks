@@ -71,7 +71,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	return OK;
 }
 
-int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
+int icmpResolve(uchar* ipaddr)
 {
 	fprintf(stdout, "icmpResolve - entered");
 
@@ -100,7 +100,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 
 	if (0 == memcmp(my_ping.ip_header->dst, ipaddr, IP_ADDR_LEN))
 	{
-		memcpy(ping, &my_ping, sizeof(struct icmp_t));
+		//memcpy(ping, &my_ping, sizeof(struct icmp_t));
 		return OK;
 	}
 
