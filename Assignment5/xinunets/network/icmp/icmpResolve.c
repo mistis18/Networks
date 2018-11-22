@@ -14,7 +14,7 @@
   */
 process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 {
-	fprintf(stdout, "echoRequest - enter", ipaddr);
+	fprintf(stdout, "echoRequest - enter\n", ipaddr);
 	sleep(1000);
 
 	uchar packet[PKTSZ];
@@ -76,13 +76,13 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 
 int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
-	fprintf(stdout, "icmpResolve - entered");
+	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
 
 	struct icmp_t my_ping;
 	message m;
 
-	fprintf(stdout, "icmpResolve - Spawn process");
+	fprintf(stdout, "icmpResolve - Spawn process\n");
 	sleep(1000);
 
 	// Spawn a process to send ping request.
@@ -92,12 +92,12 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		"ECHO requester", 3,
 		 ETH0, ipaddr, &my_ping), RESCHED_NO);
 
-	fprintf(stdout, "icmpResolve - Process spawned");
+	fprintf(stdout, "icmpResolve - Process spawned\n");
 	sleep(1000);
 
 	m = receive();
 
-	fprintf(stdout, "icmpResolve - m received");
+	fprintf(stdout, "icmpResolve - m received\n");
 	sleep(1000);
 
 	if (TIMEOUT == m)
