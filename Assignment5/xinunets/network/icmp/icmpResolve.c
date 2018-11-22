@@ -63,7 +63,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
 	// Send the echoRequest (ping)
-	size_t icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
+	uint icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
 	write(dev, (uchar *)packet, icmp_size);
 
 	sleep(1000);
@@ -73,7 +73,7 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 
 int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
-	int icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
+	uint icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
 	struct icmp_t* my_ping = (struct icmp_t*) malloc(icmp_size);
 	memcpy(my_ping, 0, icmp_size); // Clear out icmp packet 
 
