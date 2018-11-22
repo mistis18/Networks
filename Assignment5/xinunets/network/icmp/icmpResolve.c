@@ -15,7 +15,7 @@
 process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 {
 	fprintf(stdout, "echoRequest - enter\n", ipaddr);
-	sleep(1000);
+	sleep(2000);
 
 	uchar packet[PKTSZ];
 	struct ethergram *ether = (struct ethergram*) packet;
@@ -24,6 +24,9 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 	struct icmp_header_t *icmp_header = (struct icmp_header_t*) icmp->icmp_header;
 	int i;
 
+	fprintf(stdout, "echoRequest - initialized stuff\n", ipaddr);
+	sleep(2000);
+
 	// Send ARP Request
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
@@ -31,6 +34,9 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 		fprintf(stdout, "Could not resolve %s\n", ipaddr);
 		return 1;
 	}
+
+	fprintf(stdout, "echoRequest - arp request complete\n", ipaddr);
+	sleep(2000);
 
 	// Construct the echoRequest
 	bzero(packet, PKTSZ);
