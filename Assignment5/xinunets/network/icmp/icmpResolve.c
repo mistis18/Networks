@@ -12,7 +12,7 @@
   *
   * @param *ipaddr pointer to the IP address
   */
-process echoRequest(int dev, uchar* ipaddr)
+process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_header_t* icmp)
 {
 	fprintf(stdout, "echoRequest - entered\n");
 	sleep(2000);
@@ -106,13 +106,19 @@ process echoRequest(int dev, uchar* ipaddr)
 
 	sleep(1000);
 
+	memcpy(ip, dgram, sizeof(struct ipgram));
+	memcpy(icmp, icmp_header, sizeof(struct icmp_header_t));
+
 	return OK;
 }
 
-int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
+int icmpResolve(uchar* ipaddr)
 {
 	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
+
+	struct ipgram ip;
+	struct icmp_header_t icmp;
 
 	message m;
 
@@ -124,7 +130,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 	((void *)echoRequest, INITSTK,
 		proctab[currpid].priority + 1,
 		"ECHO requester", 3,
-		 ETH0, ipaddr), RESCHED_NO);
+		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned\n");
 	sleep(1000);
