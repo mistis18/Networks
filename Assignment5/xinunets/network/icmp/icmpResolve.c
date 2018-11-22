@@ -102,7 +102,7 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	icmp_header->checksum = checksum((uchar *)icmp_header,
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
-	fprintf(stdout, "echoRequest - icmp ip\n");
+	fprintf(stdout, "echoRequest - constructed icmp\n");
 	sleep(2000);
 
 	// Set IP Header Checksum and Length
@@ -114,7 +114,8 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	fprintf(stdout, "echoRequest - checksums done\n");
 	sleep(2000);
 
-	write(dev, (uchar*)packet, sizeof(packet));
+	write(dev, (uchar *)packet,
+		sizeof(struct ethergram) + sizeof(struct ipgram) + sizeof(struct icmp_header_t));
 
 	sleep(1000);
 
