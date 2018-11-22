@@ -75,10 +75,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
 	fprintf(stdout, "icmpResolve - entered");
 
-	ushort icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
-	struct icmp_t* my_ping = (struct icmp_t*) malloc(icmp_size);
-	memcpy(my_ping, 0, icmp_size); // Clear out icmp packet 
-
+	struct icmp_t ping;
 	message m;
 
 	fprintf(stdout, "icmpResolve - Spawn process");
@@ -88,7 +85,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 	((void *)echoRequest, INITSTK,
 		proctab[currpid].priority + 1,
 		"ECHO requester", 3,
-		 ETH0, ipaddr, my_ping), RESCHED_NO);
+		 ETH0, ipaddr, &my_ping), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned");
 
@@ -101,7 +98,7 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		return SYSERR;
 	}
 
-	if (0 == memcmp(my_ping->ip_header->dst, ipaddr, IP_ADDR_LEN))
+	if (0 == memcmp(my_ping.ip_header->dst, ipaddr, IP_ADDR_LEN))
 	{
 		memcpy(ping, my_ping, sizeof(struct icmp_t));
 		return OK;

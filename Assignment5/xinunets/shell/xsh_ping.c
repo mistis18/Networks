@@ -18,9 +18,7 @@
 command xsh_ping(int nargs, char *args[])
 {
 	uchar ipaddr[IP_ADDR_LEN];
-	ushort icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
-	struct icmp_t* ping = (struct icmp_t*) malloc(icmp_size);
-	memcpy(ping, 0, icmp_size); // Clear out icmp packet 
+	struct icmp_t ping;
 
 	/* Check arguments */
 	if(nargs < 2)
@@ -45,7 +43,7 @@ command xsh_ping(int nargs, char *args[])
 	fprintf(stdout, "PING %s \n", ipaddr);
 
 	/* Call icmpResolve */
-	if (OK != icmpResolve(ipaddr, ping))
+	if (OK != icmpResolve(ipaddr, &ping))
 	{
 		fprintf(stdout, "Could not resolve %s\n", args[1]);
 		return 1;
