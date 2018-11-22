@@ -71,9 +71,12 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	bzero(packet, PKTSZ);
 
 	// Construct Ethernet Header
-	for (i = 0; i < ETH_ADDR_LEN; i++)	ether->dst[i] = 0xFF;
-	control(dev, ETH_CTRL_GET_MAC, (ulong)(ether->src), 0);
+	getmac(dev, ether->src);
+	ether->dst[i] = macaddr;
 	ether->type = htons(ETYPE_IPv4);
+
+	fprintf(stdout, "echoRequest - constructed ether\n");
+	sleep(2000);
 
 	// Construct IP Header
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
@@ -84,9 +87,12 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	dgram->ttl = 63;
 	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
 	dgram->chksum = 0; /* Set Checksum and Length later */
-	for (i = 0; i < IPv4_ADDR_LEN; i++) dgram->src[i] = 0x00;
-	for (i = 0; i < IPv4_ADDR_LEN; i++) dgram->dst[i] = 0xFF;
-	
+	getip(dev, dgram->src);
+	dgram->dst = *ipaddr;
+
+	fprintf(stdout, "echoRequest - constructed ip\n");
+	sleep(2000);
+		
 	// Contrust ICMP Header
 	icmp_header->type = ECHO_REQUEST;
 	icmp_header->code = 0; /* see https://tools.ietf.org/html/rfc792 */
@@ -95,6 +101,9 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	icmp_header->checksum = checksum((uchar *)icmp_header,
 		(4 * (dgram->ver_ihl & IPv4_IHL)));
 
+	fprintf(stdout, "echoRequest - icmp ip\n");
+	sleep(2000);
+
 	// Set IP Header Checksum and Length
 	dgram->len = (sizeof(struct ipgram) + sizeof(struct icmp_header_t)); 
 	dgram->chksum = checksum((uchar *)dgram,
@@ -102,6 +111,10 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 
 	// Send the echoRequest (ping)
 	ushort icmp_size = (sizeof(struct ipgram) + sizeof(struct icmp_header_t));
+
+	fprintf(stdout, "echoRequest - checksums done\n");
+	sleep(2000);
+
 	write(dev, (uchar *)packet, icmp_size);
 
 	sleep(1000);
