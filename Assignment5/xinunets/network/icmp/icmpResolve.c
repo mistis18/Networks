@@ -137,8 +137,8 @@ int icmpResolve(uchar* ipaddr)
 	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
 
-	struct ipgram ip;
-	struct icmp_header_t icmp;
+	struct ipgram* ip;
+	struct icmp_header_t* icmp;
 
 	message m;
 
@@ -150,7 +150,7 @@ int icmpResolve(uchar* ipaddr)
 	((void *)echoRequest, INITSTK,
 		proctab[currpid].priority + 1,
 		"ECHO requester", 3,
-		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
+		 ETH0, ipaddr, ip, icmp), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned\n");
 	sleep(1000);
