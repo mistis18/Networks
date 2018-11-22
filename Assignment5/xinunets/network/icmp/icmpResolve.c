@@ -15,6 +15,7 @@
 process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 {
 	fprintf(stdout, "echoRequest - enter", ipaddr);
+	sleep(1000);
 
 	uchar packet[PKTSZ];
 	struct ethergram *ether = (struct ethergram*) packet;
@@ -76,11 +77,13 @@ process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 {
 	fprintf(stdout, "icmpResolve - entered");
+	sleep(1000);
 
 	struct icmp_t my_ping;
 	message m;
 
 	fprintf(stdout, "icmpResolve - Spawn process");
+	sleep(1000);
 
 	// Spawn a process to send ping request.
 	ready(create
@@ -90,10 +93,12 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		 ETH0, ipaddr, &my_ping), RESCHED_NO);
 
 	fprintf(stdout, "icmpResolve - Process spawned");
+	sleep(1000);
 
 	m = receive();
 
 	fprintf(stdout, "icmpResolve - m received");
+	sleep(1000);
 
 	if (TIMEOUT == m)
 	{
