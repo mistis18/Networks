@@ -8,11 +8,11 @@
 #include "../arp/arp.h"
 
  /**
-  * Generate a sequence of ARP requests.
+  * Generate an echo request.
   *
   * @param *ipaddr pointer to the IP address
   */
-process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_header_t* icmp)
+process echoRequest(int dev, uchar* ipaddr)
 {
 	fprintf(stdout, "echoRequest - entered\n");
 	sleep(2000);
@@ -20,24 +20,6 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	uchar packet[PKTSZ];
 	fprintf(stdout, "echoRequest - packet\n");
 	sleep(2000);
-
-	/*
-	struct ethergram *ether = (struct ethergram*) packet;
-	fprintf(stdout, "echoRequest - ethergram\n");
-	sleep(2000);
-
-	struct icmp_t *icmp		= (struct icmp_t*) ether->data;
-	fprintf(stdout, "echoRequest - icmp\n");
-	sleep(2000);
-
-	struct ipgram *dgram	=  icmp->ip_header;
-	fprintf(stdout, "echoRequest - ipheader\n");
-	sleep(2000);
-
-	struct icmp_header_t *icmp_header = icmp->icmp_header;
-	fprintf(stdout, "echoRequest - icmp header\n");
-	sleep(2000);
-	*/
 
 	struct ethergram *ether = (struct ethergram*) packet;
 	fprintf(stdout, "echoRequest - ethergram\n");
@@ -123,14 +105,6 @@ process echoRequest(int dev, uchar* ipaddr, struct ipgram *ip, struct icmp_heade
 	fprintf(stdout, "echoRequest - write done\n");
 	sleep(2000);
 
-	memcpy(ip, dgram, sizeof(struct ipgram));
-	fprintf(stdout, "echoRequest - ipgram done\n");
-
-	memcpy(icmp, icmp_header, sizeof(struct icmp_header_t));
-	
-	fprintf(stdout, "echoRequest - memcpy done\n");
-	sleep(2000);
-
 	return OK;
 }
 
@@ -166,12 +140,9 @@ int icmpResolve(uchar* ipaddr)
 	{
 		return SYSERR;
 	}
-
-	if (0 == memcmp(ip.src, ipaddr, IP_ADDR_LEN))
-	{
-		//memcpy(ping, &my_ping, sizeof(struct icmp_t));
-		return OK;
-	}
-
-	return SYSERR;
+	
+	fprintf(stdout, "icmpResolve - ping sent\n");
+	sleep(1000);
+	
+	return OK;
 }
