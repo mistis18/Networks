@@ -49,7 +49,7 @@ command xsh_ping(int nargs, char *args[])
 		return 1;
 	}
 
-	fprintf(stdout, "pinged", ipaddr);
+	fprintf(stdout, "pinged\n", ipaddr);
 
 	return 0;
 }

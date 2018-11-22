@@ -14,14 +14,29 @@
   */
 process echoRequest(int dev, uchar* ipaddr, struct icmp_t* ping)
 {
-	fprintf(stdout, "echoRequest - enter\n", ipaddr);
+	fprintf(stdout, "echoRequest - entered\n", ipaddr);
 	sleep(2000);
 
 	uchar packet[PKTSZ];
+	fprintf(stdout, "echoRequest - packet\n", ipaddr);
+	sleep(2000);
+
 	struct ethergram *ether = (struct ethergram*) packet;
+	fprintf(stdout, "echoRequest - ethergram\n", ipaddr);
+	sleep(2000);
+
 	struct icmp_t *icmp		= (struct icmp_t*) ether->data;
+	fprintf(stdout, "echoRequest - icmp\n", ipaddr);
+	sleep(2000);
+
 	struct ipgram *dgram	= (struct ipgram*) icmp->ip_header;
+	fprintf(stdout, "echoRequest - ipheader\n", ipaddr);
+	sleep(2000);
+
 	struct icmp_header_t *icmp_header = (struct icmp_header_t*) icmp->icmp_header;
+	fprintf(stdout, "echoRequest - icmp header\n", ipaddr);
+	sleep(2000);
+
 	int i;
 
 	fprintf(stdout, "echoRequest - initialized stuff\n", ipaddr);
