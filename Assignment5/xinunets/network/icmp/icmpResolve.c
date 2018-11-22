@@ -104,7 +104,5 @@ int icmpResolve(uchar* ipaddr, struct icmp_t* ping)
 		return OK;
 	}
 
-	free(my_ping);
-
 	return SYSERR;
 }
