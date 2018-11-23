@@ -71,8 +71,16 @@ process echoRequest(int dev, uchar* ipaddr)
 	bzero(packet, PKTSZ);
 
 	// Construct Ethernet Header
+	bzero(ether->src, ETH_ADDR_LEN);
 	getmac(dev, ether->src);
+	fprintf(stdout, "echoRequest - ether->src %\n", ether->src);
+	sleep(2000);
+
+	bzero(ether->dst, ETH_ADDR_LEN);
 	memcpy(ether->dst, macaddr, ETH_ADDR_LEN);
+	fprintf(stdout, "echoRequest - ether->src %\n", ether->src);
+	sleep(2000);
+
 	ether->type = htons(ETYPE_IPv4);
 
 	fprintf(stdout, "echoRequest - constructed ether\n");
@@ -82,7 +90,10 @@ process echoRequest(int dev, uchar* ipaddr)
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
 	dgram->tos = IPv4_TOS_ROUTINE; /*Type 0*/
 	dgram->len = 0; /* Set Checksum and Length later */
-	dgram->id = htons(currpid);
+
+	i = htonl(currpid);
+	memcpy(&(dgram->id), &i, sizeof(dgram->id));
+
 	dgram->flags_froff = 0;
 	dgram->ttl = 63;
 	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
@@ -104,7 +115,9 @@ process echoRequest(int dev, uchar* ipaddr)
 	// Contrust ICMP Header
 	icmp_header->type = ECHO_REQUEST;
 	icmp_header->code = 0; /* see https://tools.ietf.org/html/rfc792 */
-	icmp_header->identifier = htons(currpid);
+	i = htonl(currpid);
+	memcpy(&(icmp_header->identifier), &i, sizeof(icmp_header->identifier));
+
 	icmp_header->sequence_number = 0;
 	icmp_header->checksum = checksum((uchar*) icmp_header, sizeof(struct icmp_header_t));
 
