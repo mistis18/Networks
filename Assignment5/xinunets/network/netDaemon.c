@@ -82,10 +82,11 @@ void netDaemon(int dev, struct netif *nif)
 
 				if(icmp_header->type == ECHO_REPLY)
 				{
-					//Get PING PID
+					// Print results
+					printResponse(dgram);
 
 					//Send reply to PING process
-
+					send(getWaitingPID(), (ulong)packet);
 				}
 				else if(icmp_header->type == ECHO_REQUEST)
 				{

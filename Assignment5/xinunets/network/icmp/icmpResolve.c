@@ -7,6 +7,23 @@
 #include "icmp.h"
 #include "../arp/arp.h"
 
+int waitingPID;
+
+ /**
+  * Get the PID from the echoRequest.
+  *
+  */
+const int getWaitingPID() const
+{
+	return waitingPID;
+}
+
+void printResponse(const struct ipgram* dgram)
+{
+	fprintf(stdout, "Recieved reply from %s: Bytes:%d TTL:%d\n", 
+		dgram->src, dgram->len, dgram->ttl);		
+}
+
 
  /**
   * Generate an echo request.
@@ -186,7 +203,8 @@ int icmpResolve(uchar* ipaddr)
 {
 	fprintf(stdout, "icmpResolve - entered\n");
 	sleep(1000);
-
+	waitingPID = currpid;
+		
 	struct ipgram ip;
 	struct icmp_header_t icmp;
 
