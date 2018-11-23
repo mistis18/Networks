@@ -92,6 +92,9 @@ process echoRequest(int dev, uchar* ipaddr)
 
 
 	fprintf(stdout, "echoRequest - constructed ip\n");
+	fprintf(stdout, "echoRequest - ip dst %s\n", dgram->src);
+	fprintf(stdout, "echoRequest - ip src %s\n", dgram->dst);
+
 	sleep(2000);
 		
 	// Contrust ICMP Header
