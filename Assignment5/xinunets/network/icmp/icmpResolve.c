@@ -87,13 +87,17 @@ process echoRequest(int dev, uchar* ipaddr)
 	dgram->ttl = 63;
 	dgram->proto = IPv4_PROTO_ICMP; /*Protocol 1*/
 	dgram->chksum = 0; /* Set Checksum and Length later */
+
+	bzero(dgram->src, IP_ADDR_LEN);
 	getip(dev, dgram->src);
+
+	bzero(dgram->dst, IP_ADDR_LEN);
 	memcpy(dgram->dst, ipaddr, IP_ADDR_LEN);
 
 
 	fprintf(stdout, "echoRequest - constructed ip\n");
-	fprintf(stdout, "echoRequest - ip dst %s\n", dgram->src);
-	fprintf(stdout, "echoRequest - ip src %s\n", dgram->dst);
+	fprintf(stdout, "echoRequest - ip src %s\n", dgram->src);
+	fprintf(stdout, "echoRequest - ip dst %s\n", dgram->dst);
 
 	sleep(2000);
 		
