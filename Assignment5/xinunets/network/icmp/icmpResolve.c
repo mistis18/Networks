@@ -13,7 +13,7 @@ int waitingPID;
   * Get the PID from the echoRequest.
   *
   */
-const int getWaitingPID() 
+const int getWaitingPID(void) 
 {
 	return waitingPID;
 }

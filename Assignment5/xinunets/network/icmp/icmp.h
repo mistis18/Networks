@@ -60,4 +60,4 @@ struct icmp_t
 int icmpResolve(uchar* ipaddr);
 process echoReply(int dev, struct ethergram* egram);
 void printResponse(const struct ipgram* egram);
-const int getWaitingPID();
+const int getWaitingPID(void);
