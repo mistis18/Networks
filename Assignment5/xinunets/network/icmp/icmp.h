@@ -58,5 +58,5 @@ struct icmp_t
 */ 
 
 int icmpResolve(uchar* ipaddr);
-process echoReply(int dev, struct ethergram* egram)
+process echoReply(int dev, struct ethergram* egram);
 
