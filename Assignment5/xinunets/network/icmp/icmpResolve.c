@@ -78,7 +78,7 @@ process echoRequest(int dev, uchar* ipaddr)
 
 	bzero(ether->dst, ETH_ADDR_LEN);
 	memcpy(ether->dst, macaddr, ETH_ADDR_LEN);
-	fprintf(stdout, "echoRequest - ether->src %d\n", ether->src);
+	fprintf(stdout, "echoRequest - ether->dst %d\n", ether->dst);
 	sleep(2000);
 
 	ether->type = htons(ETYPE_IPv4);
