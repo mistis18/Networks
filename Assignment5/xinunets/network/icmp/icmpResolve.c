@@ -106,16 +106,14 @@ process echoRequest(int dev, uchar* ipaddr)
 	icmp_header->code = 0; /* see https://tools.ietf.org/html/rfc792 */
 	icmp_header->identifier = htons(currpid);
 	icmp_header->sequence_number = 0;
-	icmp_header->checksum = checksum((uchar *)icmp_header,
-		(4 * (dgram->ver_ihl & IPv4_IHL)));
+	icmp_header->checksum = checksum((uchar*) icmp_header, sizeof(struct icmp_header_t));
 
 	fprintf(stdout, "echoRequest - constructed icmp\n");
 	sleep(2000);
 
 	// Set IP Header Checksum and Length
 	dgram->len = (sizeof(struct ipgram) + sizeof(struct icmp_header_t)); 
-	dgram->chksum = checksum((uchar *)dgram,
-		(4 * (dgram->ver_ihl & IPv4_IHL)));
+	dgram->chksum = checksum((uchar*) dgram, dgram->len);
 
 	// Send the echoRequest (ping)
 	fprintf(stdout, "echoRequest - checksums done\n");
