@@ -60,7 +60,7 @@ process echoRequest(int dev, uchar* ipaddr)
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
-		fprintf(stdout, "Could not resolve %s\n", ipaddr);
+		fprintf(stdout, "Could not resolve %d\n", ipaddr);
 		return 1;
 	}
 
@@ -73,12 +73,12 @@ process echoRequest(int dev, uchar* ipaddr)
 	// Construct Ethernet Header
 	bzero(ether->src, ETH_ADDR_LEN);
 	getmac(dev, ether->src);
-	fprintf(stdout, "echoRequest - ether->src %\n", ether->src);
+	fprintf(stdout, "echoRequest - ether->src %d\n", ether->src);
 	sleep(2000);
 
 	bzero(ether->dst, ETH_ADDR_LEN);
 	memcpy(ether->dst, macaddr, ETH_ADDR_LEN);
-	fprintf(stdout, "echoRequest - ether->src %\n", ether->src);
+	fprintf(stdout, "echoRequest - ether->src %d\n", ether->src);
 	sleep(2000);
 
 	ether->type = htons(ETYPE_IPv4);
@@ -107,8 +107,8 @@ process echoRequest(int dev, uchar* ipaddr)
 
 
 	fprintf(stdout, "echoRequest - constructed ip\n");
-	fprintf(stdout, "echoRequest - ip src %s\n", dgram->src);
-	fprintf(stdout, "echoRequest - ip dst %s\n", dgram->dst);
+	fprintf(stdout, "echoRequest - ip src %d\n", dgram->src);
+	fprintf(stdout, "echoRequest - ip dst %d\n", dgram->dst);
 
 	sleep(2000);
 		
