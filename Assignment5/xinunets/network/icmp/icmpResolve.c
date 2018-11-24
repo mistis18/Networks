@@ -48,7 +48,7 @@ process echoRequest(int dev, uchar* ipaddr)
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
-		//send(getWaitingPID(), OK);
+		send(getWaitingPID(), OK);
 
 		return 1;
 	}
