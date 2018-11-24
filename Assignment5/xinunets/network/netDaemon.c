@@ -78,18 +78,13 @@ void netDaemon(int dev, struct netif *nif)
 			}
 			else if (IPv4_PROTO_ICMP == dgram->proto)
 			{
-				fprintf(stdout, "IPv4_PROTO_ICMP - entered\n");
-				sleep(2000);
-
 				icmp_header = (struct icmp_header_t*) dgram->opts;
 
 				if(icmp_header->type == ECHO_REPLY)
 				{
-					fprintf(stdout, "IPv4_PROTO_ICMP - ECHO_REPLY\n");
-					sleep(2000);
-
 					// Print results
 					printResponse(dgram);
+					sleep(1000);
 
 					//Send reply to PING process
 					send(getWaitingPID(), (ulong)packet);

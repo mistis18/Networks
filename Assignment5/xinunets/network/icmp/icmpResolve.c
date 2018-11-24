@@ -32,29 +32,13 @@ void printResponse(const struct ipgram* dgram)
   */
 process echoRequest(int dev, uchar* ipaddr)
 {
-	fprintf(stdout, "echoRequest - entered\n");
-	sleep(2000);
-
 	uchar packet[PKTSZ];
-	fprintf(stdout, "echoRequest - packet\n");
-	sleep(2000);
 
 	struct ethergram *ether = (struct ethergram*) packet;
-	fprintf(stdout, "echoRequest - ethergram\n");
-	sleep(2000);
-
 	struct ipgram *dgram = (struct ipgram*) ether->data;
-	fprintf(stdout, "echoRequest - dgram\n");
-	sleep(2000);
-
 	struct icmp_header_t *icmp_header = (struct icmp_header_t*) dgram->opts;
-	fprintf(stdout, "echoRequest - icmp header\n");
-	sleep(2000);
 
 	int i;
-
-	fprintf(stdout, "echoRequest - initialized stuff\n");
-	sleep(2000);
 
 	// Send ARP Request
 	uchar macaddr[ETH_ADDR_LEN];
@@ -64,27 +48,16 @@ process echoRequest(int dev, uchar* ipaddr)
 		return 1;
 	}
 
-	fprintf(stdout, "echoRequest - arp request complete\n");
-	sleep(2000);
-
 	// Construct the echoRequest
 	bzero(packet, PKTSZ);
 
 	// Construct Ethernet Header
 	bzero(ether->src, ETH_ADDR_LEN);
 	getmac(dev, ether->src);
-	fprintf(stdout, "echoRequest - ether->src %d\n", ether->src);
-	sleep(2000);
-
 	bzero(ether->dst, ETH_ADDR_LEN);
 	memcpy(ether->dst, macaddr, ETH_ADDR_LEN);
-	fprintf(stdout, "echoRequest - ether->dst %d\n", ether->dst);
-	sleep(2000);
 
 	ether->type = htons(ETYPE_IPv4);
-
-	fprintf(stdout, "echoRequest - constructed ether\n");
-	sleep(2000);
 
 	// Construct IP Header
 	dgram->ver_ihl = (IPv4_VERSION << 4) | (IPv4_HDR_LEN >> 2);
@@ -104,13 +77,6 @@ process echoRequest(int dev, uchar* ipaddr)
 
 	bzero(dgram->dst, IP_ADDR_LEN);
 	memcpy(dgram->dst, ipaddr, IP_ADDR_LEN);
-
-
-	fprintf(stdout, "echoRequest - constructed ip\n");
-	fprintf(stdout, "echoRequest - ip src %d\n", dgram->src);
-	fprintf(stdout, "echoRequest - ip dst %d\n", dgram->dst);
-
-	sleep(2000);
 		
 	// Contrust ICMP Header
 	icmp_header->type = ECHO_REQUEST;
@@ -121,25 +87,15 @@ process echoRequest(int dev, uchar* ipaddr)
 	icmp_header->sequence_number = 0;
 	icmp_header->checksum = checksum((uchar*) icmp_header, sizeof(struct icmp_header_t));
 
-	fprintf(stdout, "echoRequest - constructed icmp\n");
-	sleep(2000);
-
 	// Set IP Header Checksum and Length
 	dgram->len = (sizeof(struct ipgram) + sizeof(struct icmp_header_t)); 
 	dgram->chksum = checksum((uchar*) dgram, dgram->len);
 
 	// Send the echoRequest (ping)
-	fprintf(stdout, "echoRequest - checksums done\n");
-	sleep(2000);
-
 	write(dev, (uchar *)packet,
 		sizeof(struct ethergram) + sizeof(struct ipgram) + sizeof(struct icmp_header_t));
 
 	sleep(1000);
-
-	// Send the echoRequest (ping)
-	fprintf(stdout, "echoRequest - write done\n");
-	sleep(2000);
 
 	return OK;
 }
@@ -219,17 +175,11 @@ int icmpReply(struct ethergram* egram)
 
 int icmpResolve(uchar* ipaddr)
 {
-	fprintf(stdout, "icmpResolve - entered\n");
-	sleep(1000);
 	waitingPID = currpid;
 		
 	struct ipgram ip;
 	struct icmp_header_t icmp;
-
 	message m;
-
-	fprintf(stdout, "icmpResolve - Spawn process\n");
-	sleep(1000);
 
 	// Spawn a process to send ping request.
 	ready(create
@@ -238,21 +188,16 @@ int icmpResolve(uchar* ipaddr)
 		"ECHO requester", 3,
 		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
-	fprintf(stdout, "icmpResolve - Process spawned\n");
-	sleep(1000);
-
 	m = receive();
-
-	fprintf(stdout, "icmpResolve - m received\n");
-	sleep(1000);
+	if (TIMEOUT == m)
+	{
+		return SYSERR;
+	}
 
 	if (TIMEOUT == m)
 	{
 		return SYSERR;
 	}
-	
-	fprintf(stdout, "icmpResolve - ping sent\n");
-	sleep(1000);
 	
 	return OK;
 }
