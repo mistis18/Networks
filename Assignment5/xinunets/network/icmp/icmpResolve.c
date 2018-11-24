@@ -23,7 +23,7 @@ void printResponse(const struct ipgram* dgram)
 {
 	ulong elapsed = ctr_mS - startTime;
 	
-	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d Time:%f TTL:%d\n", 
+	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d Time:%d TTL:%d\n", 
 		dgram->src[0], dgram->src[1], dgram->src[2], dgram->src[3], 
 		dgram->len, elapsed, dgram->ttl);
 }
