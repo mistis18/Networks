@@ -20,8 +20,9 @@ const int getWaitingPID(void)
 
 void printResponse(const struct ipgram* dgram)
 {
-	fprintf(stdout, "Recieved reply from %s: Bytes:%d TTL:%d\n", 
-		dgram->src, dgram->len, dgram->ttl);		
+	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d TTL:%d\n", 
+		dgram->src[0], dgram->src[1], dgram->src[2], dgram->src[0], 
+		dgram->len, dgram->ttl);
 }
 
 
