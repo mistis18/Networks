@@ -48,7 +48,14 @@ process echoRequest(int dev, uchar* ipaddr)
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
-		fprintf(stdout, "Could not resolve %d\n", ipaddr);
+		bzero(dgram->dst, IP_ADDR_LEN);
+		memcpy(dgram->dst, ipaddr, IP_ADDR_LEN);
+
+		fprintf(stdout, "Could not resolve %d.%d.%d.%dd\n", 
+			dgram->dst[0], dgram->dst[1], dgram->dst[2], dgram->dst[3]);
+
+		send(getWaitingPID(), SYSERR);
+
 		return 1;
 	}
 
@@ -194,12 +201,7 @@ int icmpResolve(uchar* ipaddr)
 		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
 	m = receive();
-	if (TIMEOUT == m)
-	{
-		return SYSERR;
-	}
-
-	if (TIMEOUT == m)
+	if (OK != m)
 	{
 		return SYSERR;
 	}
