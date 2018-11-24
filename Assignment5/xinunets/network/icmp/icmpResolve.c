@@ -21,9 +21,9 @@ const int getWaitingPID(void)
 
 void printResponse(const struct ipgram* dgram)
 {
-	ulong elapsed = ctr_mS - startTime;
+	ulong elapsed = clocktime - startTime;
 	
-	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d Time:%d TTL:%d\n", 
+	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d Time:%d seconds TTL:%d\n", 
 		dgram->src[0], dgram->src[1], dgram->src[2], dgram->src[3], 
 		dgram->len, elapsed, dgram->ttl);
 }
@@ -180,7 +180,7 @@ int icmpReply(struct ethergram* egram)
 int icmpResolve(uchar* ipaddr)
 {
 	waitingPID = currpid;
-	startTime = ctr_mS;
+	startTime = clocktime;
 		
 	struct ipgram ip;
 	struct icmp_header_t icmp;
