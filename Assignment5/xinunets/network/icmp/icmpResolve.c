@@ -195,7 +195,7 @@ int icmpResolve(uchar* ipaddr)
 		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
 	m = receive();
-	if (OK != m)
+	if (TIMEOUT == m)
 	{
 		return SYSERR;
 	}
