@@ -48,6 +48,7 @@ process echoRequest(int dev, uchar* ipaddr)
 	uchar macaddr[ETH_ADDR_LEN];
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
+		fprintf(stdout, "Ping failed.");
 		send(waitingPID, OK);
 		return 1;
 	}
