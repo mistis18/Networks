@@ -182,23 +182,33 @@ int icmpResolve(uchar* ipaddr)
 {
 	waitingPID = currpid;
 	startTime = clocktime;
+	int i = 0;
+	int replies = 0;
+	int num_requests = 10;
 		
 	struct ipgram ip;
 	struct icmp_header_t icmp;
 	message m;
 
 	// Spawn a process to send ping request.
-	ready(create
-	((void *)echoRequest, INITSTK,
-		proctab[currpid].priority + 1,
-		"ECHO requester", 3,
-		 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
-	m = receive();
-	if (TIMEOUT == m)
+	for(i=0; i<num_requests; i++)
 	{
-		return SYSERR;
+		ready(create
+		((void *)echoRequest, INITSTK,
+			proctab[currpid].priority + 1,
+			"ECHO requester", 3,
+			 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
+
+		m = recvtime(1000);
+		if (TIMEOUT != m)
+		{
+			replies++;
+		}
 	}
+	sleep(500);
+	fprintf(stdout, "%d Packets transmitted, %d recieved\n",num_requests, replies);
+	sleep(500);
 	
 	return OK;
 }
