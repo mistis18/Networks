@@ -9,6 +9,7 @@
 
 int waitingPID;
 ulong startTime;
+int imcpLock;
 
  /**
   * Get the PID from the echoRequest.
@@ -185,7 +186,9 @@ int icmpResolve(uchar* ipaddr)
 	int i = 0;
 	int replies = 0;
 	int num_requests = 10;
-		
+	
+	imcpLock = semcreate(1)
+
 	struct ipgram ip;
 	struct icmp_header_t icmp;
 	message m;
@@ -201,11 +204,14 @@ int icmpResolve(uchar* ipaddr)
 			 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
 		m = recvtime(1000);
+		wait(imcpLock);
 		if (TIMEOUT != m)
 		{
 			replies++;
 		}
+		signal(imcpLock);
 	}
+
 	sleep(500);
 	fprintf(stdout, "%d Packets transmitted, %d recieved\n",num_requests, replies);
 	sleep(500);
