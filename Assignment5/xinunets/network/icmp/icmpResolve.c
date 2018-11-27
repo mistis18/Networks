@@ -10,6 +10,7 @@
 int waitingPID;
 ulong startTime;
 int imcpLock;
+int replies = 0;
 
  /**
   * Get the PID from the echoRequest.
@@ -23,6 +24,7 @@ const int getWaitingPID(void)
 void printResponse(const struct ipgram* dgram)
 {
 	wait(imcpLock);
+	replies++;;
 
 	ulong elapsed = clocktime - startTime;
 	
@@ -188,7 +190,7 @@ int icmpResolve(uchar* ipaddr)
 	waitingPID = currpid;
 	startTime = clocktime;
 	int i = 0;
-	int replies = 0;
+	replies = 0;
 	int num_requests = 10;
 	
 	imcpLock = semcreate(1);
@@ -209,9 +211,9 @@ int icmpResolve(uchar* ipaddr)
 
 		m = recvtime(1000);
 		wait(imcpLock);
-		if (TIMEOUT != m)
+		if (TIMEOUT == m)
 		{
-			replies++;
+			return SYSERR;
 		}
 		signal(imcpLock);
 	}
