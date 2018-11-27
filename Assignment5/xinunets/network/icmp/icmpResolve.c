@@ -22,11 +22,15 @@ const int getWaitingPID(void)
 
 void printResponse(const struct ipgram* dgram)
 {
+	wait(imcpLock);
+
 	ulong elapsed = clocktime - startTime;
 	
 	fprintf(stdout, "Recieved reply from %d.%d.%d.%d: Bytes:%d Time:%d seconds TTL:%d\n", 
 		dgram->src[0], dgram->src[1], dgram->src[2], dgram->src[3], 
 		dgram->len, elapsed, dgram->ttl);
+
+	signal(imcpLock);
 }
 
 
@@ -212,9 +216,9 @@ int icmpResolve(uchar* ipaddr)
 		signal(imcpLock);
 	}
 
-	sleep(500);
+	sleep(2000);
 	fprintf(stdout, "%d Packets transmitted, %d recieved\n",num_requests, replies);
-	sleep(500);
+	sleep(1000);
 	
 	return OK;
 }
