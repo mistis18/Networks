@@ -209,7 +209,7 @@ int icmpResolve(uchar* ipaddr)
 			"ECHO requester", 3,
 			 ETH0, ipaddr, &ip, &icmp), RESCHED_NO);
 
-		m = recvtime(20000);
+		m = recvtime(5000);
 		wait(imcpLock);
 		if (TIMEOUT == m)
 		{
