@@ -187,7 +187,7 @@ int icmpResolve(uchar* ipaddr)
 	int replies = 0;
 	int num_requests = 10;
 	
-	imcpLock = semcreate(1)
+	imcpLock = semcreate(1);
 
 	struct ipgram ip;
 	struct icmp_header_t icmp;
