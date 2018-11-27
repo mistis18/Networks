@@ -56,8 +56,8 @@ process echoRequest(int dev, uchar* ipaddr)
 	if (OK != arpResolve(ipaddr, macaddr))
 	{
 		fprintf(stdout, "Ping failed.\n");
-		send(waitingPID, OK);
-		return 1;
+		//send(waitingPID, OK);
+		return OK;
 	}
 
 	// Construct the echoRequest
@@ -213,7 +213,7 @@ int icmpResolve(uchar* ipaddr)
 		wait(imcpLock);
 		if (TIMEOUT == m)
 		{
-			return SYSERR;
+			fprintf(stdout, "Ping timed out.\n");
 		}
 		signal(imcpLock);
 	}
